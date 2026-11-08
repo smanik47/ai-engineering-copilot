@@ -1,0 +1,31 @@
+Database Indexing
+
+Database indexes improve query performance by allowing the database
+to locate records without scanning every row.
+
+A B-tree index is commonly used in relational databases such as MySQL
+and PostgreSQL.
+
+Indexes improve read performance but can slow down INSERT, UPDATE,
+and DELETE operations because the index also needs to be maintained.
+
+Redis Caching
+
+Redis is an in-memory data store commonly used for caching.
+
+Caching frequently accessed data reduces repeated database queries
+and improves application response time.
+
+Cache invalidation is an important challenge. When database data
+changes, the corresponding cached data may become stale.
+
+Database Connection Pooling
+
+A database connection pool maintains a collection of reusable
+database connections.
+
+Instead of creating a new database connection for every request,
+the application can borrow an existing connection from the pool.
+
+Connection pooling reduces connection creation overhead and
+improves application performance.
