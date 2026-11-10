@@ -1,11 +1,18 @@
+
 from services.document_service import DocumentService
 from services.chat_service import ChatService
+from services.memory_service import MemoryService
 
 
-# Create shared service instances
+# Shared service instances
 
 _document_service = DocumentService()
-_chat_service = ChatService()
+
+_memory_service = MemoryService()
+
+_chat_service = ChatService(
+    memory_service=_memory_service
+)
 
 
 # Dependency providers

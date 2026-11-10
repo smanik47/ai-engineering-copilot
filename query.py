@@ -102,7 +102,12 @@ def retrieve_chunks(question, index, chunks, top_k=3):
 # STEP 4: GENERATE ANSWER
 # --------------------------------
 
-def generate_answer(question, retrieved_chunks):
+
+def generate_answer(
+        question,
+        retrieved_chunks,
+        conversation_history=None
+):
 
     context_parts = []
 
@@ -120,22 +125,36 @@ Content:
 
     context = "\n\n".join(context_parts)
 
+    history = ""
+
+    if conversation_history:
+
+        history = "\n".join(
+            f"{message['role']}: {message['content']}"
+            for message in conversation_history
+        )
+
     prompt = f"""
 You are a technical knowledge assistant.
 
-Answer the user's question using the provided context.
+Answer the user's question using the provided document context
+and conversation history.
 
 Rules:
-1. Use the supplied context as the source of truth.
-2. Do not invent facts that are not supported by the context.
-3. If the context is insufficient, say so clearly.
-4. Mention the source filename and page number
+1. Use the supplied document context as the source of truth.
+2. Do not invent facts unsupported by the context.
+3. Use conversation history to understand follow-up questions.
+4. If the context is insufficient, say so clearly.
+5. Mention the source filename and page number
    when using information from a document.
 
-Context:
+Previous conversation:
+{history}
+
+Document context:
 {context}
 
-User question:
+Current user question:
 {question}
 """
 
@@ -145,6 +164,7 @@ User question:
     )
 
     return response.output_text
+
 
 
 # --------------------------------
@@ -189,7 +209,12 @@ def main():
 if __name__ == "__main__":
     main()
 
-def answer_question(question, top_k=3):
+
+def answer_question(
+        question,
+        top_k=3,
+        conversation_history=None
+):
 
     index, chunks = load_knowledge_base()
 
@@ -197,7 +222,7 @@ def answer_question(question, top_k=3):
         question,
         index,
         chunks,
-        top_k=3
+        top_k=top_k
     )
 
     if not retrieved_chunks:
@@ -208,7 +233,8 @@ def answer_question(question, top_k=3):
 
     answer = generate_answer(
         question,
-        retrieved_chunks
+        retrieved_chunks,
+        conversation_history
     )
 
     sources = []

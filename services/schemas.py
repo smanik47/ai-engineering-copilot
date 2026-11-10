@@ -1,4 +1,6 @@
+
 from pydantic import BaseModel, Field
+from typing import Optional
 
 
 class ChatRequest(BaseModel):
@@ -7,6 +9,8 @@ class ChatRequest(BaseModel):
         min_length=1,
         max_length=4000
     )
+
+    conversation_id: Optional[str] = None
 
     top_k: int = Field(
         default=3,
@@ -25,6 +29,7 @@ class SourceResponse(BaseModel):
 
 class ChatResponse(BaseModel):
 
+    conversation_id: str
     question: str
     answer: str
     sources: list[SourceResponse]

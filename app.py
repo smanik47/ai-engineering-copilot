@@ -124,13 +124,20 @@ def chat(
         service: ChatService = Depends(get_chat_service)
 ):
 
+    conversation_id = (
+            request.conversation_id or str(uuid4())
+    )
+
     try:
 
         result = service.ask_question(
-            request.question
+            question=request.question,
+            conversation_id=conversation_id,
+            top_k=request.top_k
         )
 
         return {
+            "conversation_id": conversation_id,
             "question": request.question,
             "answer": result["answer"],
             "sources": result["sources"]
