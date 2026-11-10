@@ -9,11 +9,11 @@ from fastapi import (
     Depends
 )
 
-from schemas import ChatRequest
+from services.schemas import ChatRequest, ChatResponse
 from services.document_service import DocumentService
 from services.chat_service import ChatService
 
-from dependencies import (
+from services.dependencies import (
     get_document_service,
     get_chat_service
 )
@@ -118,7 +118,7 @@ def upload_document(
 # CHAT ENDPOINT
 # --------------------------------
 
-@app.post("/chat")
+@app.post("/chat", response_model=ChatResponse)
 def chat(
         request: ChatRequest,
         service: ChatService = Depends(get_chat_service)

@@ -163,7 +163,7 @@ def main():
         question,
         index,
         chunks,
-        top_k=3
+        top_k=top_k
     )
 
     print("\nRetrieved sources:")
@@ -189,7 +189,7 @@ def main():
 if __name__ == "__main__":
     main()
 
-def answer_question(question):
+def answer_question(question, top_k=3):
 
     index, chunks = load_knowledge_base()
 
