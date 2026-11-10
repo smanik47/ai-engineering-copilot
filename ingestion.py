@@ -203,12 +203,14 @@ def build_and_save_index(all_chunks):
     print(f"Total vectors: {index.ntotal}")
     print(f"Vector dimensions: {dimension}")
 
+    return index.ntotal
+
 
 # --------------------------------
 # MAIN EXECUTION
 # --------------------------------
 
-def main():
+def rebuild_knowledge_base():
 
     pdf_files = list(PDF_DIR.glob("*.pdf"))
 
@@ -225,7 +227,15 @@ def main():
 
         all_chunks.extend(document_chunks)
 
-    build_and_save_index(all_chunks)
+    return build_and_save_index(all_chunks)
+
+
+def main():
+
+    total_chunks = rebuild_knowledge_base()
+
+    print("\nIngestion completed!")
+    print(f"Total chunks: {total_chunks}")
 
 
 if __name__ == "__main__":

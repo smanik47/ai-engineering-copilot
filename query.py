@@ -188,3 +188,41 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+def answer_question(question):
+
+    index, chunks = load_knowledge_base()
+
+    retrieved_chunks = retrieve_chunks(
+        question,
+        index,
+        chunks,
+        top_k=3
+    )
+
+    if not retrieved_chunks:
+        return {
+            "answer": "No relevant documents were found.",
+            "sources": []
+        }
+
+    answer = generate_answer(
+        question,
+        retrieved_chunks
+    )
+
+    sources = []
+
+    for item in retrieved_chunks:
+
+        sources.append({
+            "chunk_id": item["chunk_id"],
+            "source": item["source"],
+            "page": item["page"],
+            "similarity_score": item["score"]
+        })
+
+    return {
+        "answer": answer,
+        "sources": sources
+    }
